@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plastic Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Styles remain the same */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: rgb(173, 42, 19);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #343a40;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #495057;
+        }
+        .container {
+            text-align: center;
+            background: #ffffff;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            
+        }
+        .container1{
+            margin-top:-250px;
+            text-align: center;
+            background: #ffffff;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            transition: background-color 0.3s;
+        }
+        .output:hover {
+            background-color: #e2e6ea;
+        }
+        #image-preview {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        section {
+            margin: 20px 0;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        /*#home {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpZQnNabtmlZNuYLeN3dIz7ZHBt4p9XEZcPg&s') no-repeat center center/cover;
+        }*/
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adds a dark overlay for better text visibility */
+        }
+        .text-section {
+            position: relative;
+            z-index: 1;
+        }
+        .text-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .text-section p {
+            font-size: 1.2rem;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        #home {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px;
+            background-color: #f8f9fa;
+            height: 100vh;
+            margin-bottom:-200px;
+            /* margin-top:-80px; */
+        }
+        .text-section {
+            flex: 1;
+            margin-right: 20px;
+            color: #333;
+            text-align: left;
+            margin-top:-300px;
+        }
+        .text-section h2 {
+            font-size: 2.0rem;
+            margin-bottom: 2rem;
+            color:crimson;
+            margin-left: 90px;
+        }
+        .text-section p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        .image-section {
+            flex: 1;
+            text-align: center;
+            margin-left:30px;
+            margin-top:-300px;
+            /* margin-bottom:200px; */
+        }
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .cta-btn {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fff;
+        background-color: #ff4081;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        /* margin-top:-500px; */
+        margin-left: 200px;
+    }
+
+    .cta-btn:hover {
+        background-color: #e0356d;
+        transform: scale(1.05);
+    }
+    #about-project .content-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+#about-project .image-sec {
+    height:300px;
+    margin-right: 40px;
+
+}
+
+#about-project .text-sec {
+    flex: 2;
+}
+
+#about-project img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
+        
+
+
+        
+        #predictions {
+            background: url('https://i.pinimg.com/736x/ce/ab/31/ceab311b1dcdbebc85b35a2fe88bea94.jpg') no-repeat center center;
+            background-size: cover;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #cf610c; /* Highlight headings for better visibility */
+        }
+
+        ol {
+            padding-left: 20px;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #35b732;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        
+
+       
+
+        
+table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin-right: 2px;
+            margin-top: -100px;
+        }
+ 
+        th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 6px;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .formulas {
+            width: 40%;
+            font-size: 16px;
+            line-height: 1.8;
+            background-color: whitesmoke;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: -200px;
+            box-shadow: 0 4px 6px rgba(162, 20, 20, 0.1);
+        }
+        .formulas h2 {
+            text-align: left;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #e0356d;
+            text-align: center;
+        }
+        .formulas p {
+            margin: 20px 0;
+            
+        }
+        .formulas strong {
+            color: #333;
+        }
+        #project-flowchart {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#project-flowchart h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.text-section v {
+    width: 45%;
+    padding-right: 10px;
+    margin-top: 200px;
+}
+
+.text-section p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 100px;
+    
+}
+
+.flowchart-container {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flowchart-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.step-box {
+    background-color: #ffffff;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.arrow {
+    font-size: 20px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.flowchart-step:last-child .arrow {
+    display: none;
+}
+
+.step-box p {
+    font-size: 1.1em;
+    color: #555;
+    font-weight: bold;
+    margin: 5px 0;
+}
+h2 {
+            color: #2a9d8f;
+        }
+        .project-flowchart {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .flowchart-container {
+            flex: 1;
+            max-width: 45%;
+            margin-right: 20px;
+        }
+        .flowchart-container img {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .content-container {
+            flex: 1;
+            max-width: 50%;
+        }
+        h1 {
+            text-align: center;
+            color: #2a9d8f;
+        }
+        h2 {
+            color: #2a9d8f;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        @media (max-width: 768px) {
+            .project-flowchart {
+                flex-direction: column;
+            }
+            .flowchart-container,
+            .content-container {
+                max-width: 100%;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h3>Accuracy and Efficiency Gains in Waste Classification 
+            Through Continuous Learning and Advanced Techniques 
+            </h3>
+        <p>Team members:M.Madhavi, M.Sreya Reddy, P.Nikhitha</p>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about-project">About Project</a>
+        <a href="#predictions">Predictions</a>
+        <a href="#evaluation-metrics">Model Evaluation Metrics</a>
+        <a href="#project-flowchart">Project Flowchart</a>
+    </nav>
+        
+    <section id="home" >
+        <div class="text-section">
+            <h2>Welcome to Waste Classification</h2>
+            <p>
+                This application uses deep learning to classify and identify various types of waste such as plastic, paper, metal, glass, and cardboard.
+                Upload an image to get started and discover the type of waste it is.
+            </p>
+            <button class="cta-btn" onclick="window.location.href='#upload'">Prediction</button>
+ 
+        </div>
+        <div class="image-section">
+            <img src="https://e7.pngegg.com/pngimages/474/464/png-clipart-garbage-illustration-waste-container-recycling-euclidean-garbage-collection-tshirt-text.png" alt="Waste Classification" >
+        </div>
+    </section>
+    
+
+    <div id="about-project" class="container1">
+        <h2>About the Project</h2>
+        <div class="content-wrapper">
+            <!-- Image Section -->
+            <div class="image-sec">
+                <img src="https://www.shutterstock.com/image-photo/icons-related-reduce-reuse-recycle-260nw-2316156387.jpg" alt="Waste Classification">
+            </div>
+            <!-- Text Section -->
+            <div class="text-sec">
+                <p>
+                    This project utilizes advanced deep learning techniques to classify waste into categories like plastic, paper, metal, and glass. By automating waste classification, it promotes recycling and sustainable waste management practices.
+                </p>
+                <p>
+                    Designed for individuals and organizations, it ensures high accuracy through advanced algorithms and supports smart city initiatives for environmental sustainability.
+                </p>
+                <p>
+                    The project uses advanced models like <strong>InceptionV3</strong> for efficient and accurate image classification. Additional models such as <strong>Vgg16</strong>, <strong>AlexNet</strong>, and <strong>MobileNetV2</strong> ensure scalability and performance, improving classification reliability for smarter recycling.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="predictions" class="container">
+       
+        <h2>Predictions</h2>
+        <p>Upload an image to view the prediction results.</p>
+        <div>
+            <h3>Upload an Image</h3>
+            <label for="file-upload" class="upload-btn">Choose File</label>
+            <input id="file-upload" type="file" accept="image/*" onchange="uploadImage()">
+            <img id="image-preview" src="" alt="Image Preview" style="display:none;">
+            <div class="output" id="result"></div>
+        </div>
+        <h2>How It Works</h2>
+        <ul>
+            <li>
+                <strong>Upload</strong> 
+                <p>The user uploads an image of the waste material through the application.</p>
+            </li>
+            <li>
+                <strong>Preprocessing</strong> 
+                <p>The uploaded image is resized, normalized, and processed to prepare it for classification.</p>
+            </li>
+            <li>
+                <strong>Classification</strong> 
+                <p>The deep learning model identifies the type of waste (e.g., plastic, paper, metal, glass, cardboard) using trained algorithms.</p>
+            </li>
+            <li>
+                <strong>Result</strong> 
+                <p>The application displays the classification result and provides recycling or disposal tips for the waste.</p>
+            </li>
+        </ul>
+    
+    </div>
+    
+    
+    
+        <div id="evaluation-metrics" class="container"> 
+            <div class="formulas">
+                <h2>Metric Formulas</h2>
+                <p><strong>Accuracy:</strong> Accuracy = (TP + TN) / (TP + TN + FP + FN)</p>
+                <p><strong>Precision:</strong> Precision = TP / (TP + FP)</p>
+                <p><strong>Recall:</strong> Recall = TP / (TP + FN)</p>
+                <p><strong>F1 Score:</strong> F1 Score = 2 * (Precision * Recall) / (Precision + Recall)</p>
+            </div>
+    <table>
+       
+        <tr>
+            <th>Model Name</th>
+            <th>Accuracy</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1 Score</th>
+        </tr>
+        <tr>
+            <td>InceptionV3</td>
+            <td>99.70%</td>
+            <td>99.75%</td>
+            <td>99.70%</td>
+            <td>99.72%</td>
+        </tr>
+        <tr>
+            <td>MobileNetV2</td>
+            <td>97.84%</td>
+            <td>97.90%</td>
+            <td>97.85%</td>
+            <td>97.87%</td>
+        </tr>
+        <tr>
+            <td>Vgg16</td>
+            <td>85.43%</td>
+            <td>85.60%</td>
+            <td>85.40%</td>
+            <td>85.50%</td>
+        </tr>
+        <tr>
+            <td>AlexNet</td>
+            <td>57.61%</td>
+            <td>60.00%</td>
+            <td>57.61%</td>
+            <td>58.78%</td>
+        </tr>
+    </table>
+    </div>
+  </div>
+
+  
+  <h1>Project Flowchart</h1>
+  <div id="project-flowchart" class="project-flowchart">
+      <!-- Flowchart Section -->
+      <div class="flowchart-container">
+          <img src="/static/uploads/a.png" alt="Project Flowchart" style="height:600px;">
+          <p>This flowchart represents the workflow of the waste classification system.</p>
+      </div>
+
+      <!-- Content Section -->
+      <div class="content-container">
+          <h4>1. Data Preprocessing Phase</h4>
+          <p><strong>Random Oversampling:</strong> To handle class imbalance in the dataset, additional samples are generated for underrepresented categories.</p>
+          <p><strong>Data Augmentation:</strong> Techniques such as shear transformations and rotation are applied to increase the diversity of the dataset.</p>
+      
+          <h3>2. Data Separation</h3>
+          <p>The dataset is split into three subsets:</p>
+          <ul>
+              <li><strong>Train (70%):</strong> Used for training the model.</li>
+              <li><strong>Validation (15%):</strong> Used to fine-tune and validate the model's hyperparameters.</li>
+              <li><strong>Test (15%):</strong> Used for final performance evaluation.</li>
+          </ul>
+      
+          <h3>3. Classification Phase</h3>
+          <p><strong>MBWO Optimization-Based Hyperparameter Tuning:</strong> Modified Butterfly Optimization (MBWO) is used to optimize hyperparameters for improved model performance.</p>
+          <p><strong>Optimized InceptionV3:</strong> The classification model employed is an InceptionV3 architecture optimized for high accuracy.</p>
+      
+          <h3>4. Classification Output</h3>
+          <p>The system classifies waste into six categories:</p>
+          <ul>
+              <li>Cardboard</li>
+              <li>Metal</li>
+              <li>Plastic</li>
+              <li>Glass</li>
+              <li>Paper</li>
+              <li>Trash</li>
+          </ul>
+      </div>
+  </div>
+</section>
+
+    
+
+       
+                
+               
+                    
+                       
+                    
+                
+            
+        </div>
+        
+    <footer>
+        <p>&copy; 2024 Tomato Leaf Disease Detection Project. All rights reserved.</p>
+    </footer>
+    <script>
+
+    function uploadImage() {
+        const fileInput = document.getElementById('file-upload');
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Show the image preview
+        const imgPreview = document.getElementById('image-preview');
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imgPreview.src = e.target.result;
+            imgPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+
+        fetch('/predict', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultDiv = document.getElementById('result');
+            if (data.error) {
+                resultDiv.textContent = "Error: " + data.error;
+            } else {
+                resultDiv.textContent = "Prediction Category: " + data.disease_name;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+</body>
+</html>
